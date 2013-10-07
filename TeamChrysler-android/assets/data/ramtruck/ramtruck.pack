@@ -1,0 +1,40 @@
+
+ramtruck.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ramBody
+  rotate: false
+  xy: 1, 113
+  size: 471, 142
+  orig: 471, 142
+  offset: 0, 0
+  index: -1
+trailorBody
+  rotate: false
+  xy: 474, 80
+  size: 323, 175
+  orig: 323, 175
+  offset: 0, 0
+  index: -1
+trailorTire
+  rotate: false
+  xy: 1, 1
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+ramTire
+  rotate: false
+  xy: 799, 180
+  size: 76, 75
+  orig: 76, 75
+  offset: 0, 0
+  index: -1
+hinge
+  rotate: false
+  xy: 799, 135
+  size: 65, 43
+  orig: 65, 43
+  offset: 0, 0
+  index: -1
