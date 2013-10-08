@@ -32,7 +32,7 @@ public class RamBody {
 
 		fixDef.density = 2.0f;
 		fixDef.friction = 0.0f;
-		fixDef.restitution = 0.0f;
+		fixDef.restitution = 1.0f;
 	}
 
 	public void setSpriteSpec() {
@@ -54,7 +54,17 @@ public class RamBody {
 
 	public void setShapeSpec() {
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f);
+//		shape.setAsBox(width / 2f, height / 2f);
+		shape.set(new Vector2[]{
+			new Vector2(width/2, -height/2f),
+			new Vector2(width/2, 0),
+//			new Vector2(width*(35f/47f-0.5f), height*(5f/7f-0.5f)),
+			new Vector2(width*(28f/47f-0.5f), height/2f),
+			new Vector2(-width*(0.5f-20f/47f), height/2f),
+			new Vector2(-width*(0.5f-20f/47f), height*(5f/7f-0.5f)),
+			new Vector2(-width*(0.5f-1f/47f), height*(5f/7f-0.5f)),
+			new Vector2(-width/2f, -height/2f)
+		});
 		
 		fixDef.shape = shape;
 	}

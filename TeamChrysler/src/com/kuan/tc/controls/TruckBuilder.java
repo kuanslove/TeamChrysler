@@ -152,8 +152,8 @@ public class TruckBuilder {
 		
 		
 		ram_tireL_Jnt.enableMotor(true);
-		ram_tireL_Jnt.setMotorSpeed(-40f);
-		ram_tireL_Jnt.setMaxMotorTorque(30f);
+		ram_tireL_Jnt.setMotorSpeed(-15f);
+		ram_tireL_Jnt.setMaxMotorTorque(50f);
 	}
 
 	public void drawTruck(SpriteBatch batch) {
