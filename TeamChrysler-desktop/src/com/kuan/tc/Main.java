@@ -10,6 +10,7 @@ public class Main {
 		cfg.useGL20 = true;
 		cfg.width = 1920;
 		cfg.height = 1104;
+		cfg.resizable = true;
 		
 		new LwjglApplication(new TC(), cfg);
 	}

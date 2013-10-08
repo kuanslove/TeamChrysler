@@ -1,0 +1,47 @@
+
+ramui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+GreenRamDown
+  rotate: false
+  xy: 1, 626
+  size: 300, 315
+  orig: 300, 315
+  offset: 0, 0
+  index: -1
+GreenRamUp
+  rotate: false
+  xy: 1, 309
+  size: 300, 315
+  orig: 300, 315
+  offset: 0, 0
+  index: -1
+RedRamDown
+  rotate: false
+  xy: 303, 635
+  size: 299, 306
+  orig: 299, 306
+  offset: 0, 0
+  index: -1
+RedRamUp
+  rotate: false
+  xy: 1, 1
+  size: 299, 306
+  orig: 299, 306
+  offset: 0, 0
+  index: -1
+GasGauge
+  rotate: false
+  xy: 303, 333
+  size: 289, 300
+  orig: 289, 300
+  offset: 0, 0
+  index: -1
+Pause
+  rotate: false
+  xy: 604, 758
+  size: 162, 183
+  orig: 162, 183
+  offset: 0, 0
+  index: -1

@@ -47,7 +47,8 @@ public class MainGameScreen implements Screen {
 
 	private Stage stage;
 	// this is for that greenRam and redRam
-	private ImageButton power, brake;
+	private ImageButton power, brake, pause;
+	private Sprite gauge;
 
 	private InputMultiplexer plex;
 
@@ -58,6 +59,9 @@ public class MainGameScreen implements Screen {
 	// this is a test Body
 	private Body ballBd, gnd;
 	private boolean showdebug = true;
+	private boolean pausegame = false;
+
+	Music music;
 
 	public MainGameScreen(TC game) {
 		this.game = game;
@@ -72,10 +76,8 @@ public class MainGameScreen implements Screen {
 		rvDef = new RevoluteJointDef();
 		builder.joinParts(wldDef, rvDef);
 
-		
 		setTest();
-		
-		
+
 		batch = new SpriteBatch();
 	}
 
@@ -114,22 +116,22 @@ public class MainGameScreen implements Screen {
 		ballBd.createFixture(barfixDef);
 
 		bgs = new Sprite[2];
-		
+
 		Texture texture1 = new Texture(Gdx.files.internal("data/scene/bg.jpg"));
 		bg = new Sprite(texture1);
 		bg.setPosition(-60, -20);
 		bg.setSize(bg.getWidth() / 15, bg.getHeight() / 15);
 
 		bgs[0] = bg;
-		
-		
-		Texture texture2 = new Texture(Gdx.files.internal("data/scene/bg-night.jpg"));
+
+		Texture texture2 = new Texture(
+				Gdx.files.internal("data/scene/bg-night.jpg"));
 		bg = new Sprite(texture2);
-		bg.setPosition(-60+bgs[0].getWidth(), -10);
+		bg.setPosition(-60 + bgs[0].getWidth(), -10);
 		bg.setSize(bg.getWidth() / 15, bg.getHeight() / 15);
-		
+
 		bgs[1] = bg;
-		
+
 		Texture ball_tex = new Texture(Gdx.files.internal("data/scene/HGD.png"));
 		ball_sp = new Sprite(ball_tex);
 		ball_sp.setSize(6, 6);
@@ -151,12 +153,11 @@ public class MainGameScreen implements Screen {
 
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-//		bg.draw(batch);
-		for(Sprite b : bgs){
+		// bg.draw(batch);
+		for (Sprite b : bgs) {
 			b.draw(batch);
 		}
-		
-		
+
 		builder.drawTruck(batch);
 
 		// here is test ball
@@ -165,13 +166,24 @@ public class MainGameScreen implements Screen {
 		batch.end();
 
 		cam.position.set(builder.getTrailorBd().getPosition().x + 5, builder
-				.getTrailorBd().getPosition().y+4, 0);
+				.getTrailorBd().getPosition().y + 4, 0);
 		cam.update();
 
 		if (showdebug) {
 			debug.render(world, cam.combined);
 		}
-		world.step(1 / 60f, 8, 3);
+
+		if (!pausegame) {
+			world.step(1 / 60f, 8, 3);
+		
+			if(!music.isPlaying()){
+				music.play();
+			}
+		} else {
+			if(music.isPlaying()){
+				music.pause();
+			}
+		}
 
 	}
 
@@ -180,11 +192,7 @@ public class MainGameScreen implements Screen {
 		cam.viewportWidth = width / 60;
 		cam.viewportHeight = height / 60;
 		cam.update();
-		
-		Music music = Gdx.audio.newMusic(Gdx.files.internal("data/scene/BGM.mp3"));
-		 music.setLooping(true);
-		 music.setVolume(15);
-		 music.play();
+
 	}
 
 	@Override
@@ -201,41 +209,18 @@ public class MainGameScreen implements Screen {
 
 			@Override
 			public boolean keyUp(int keycode) {
-				
+
 				switch (keycode) {
 				case Keys.D:
 					showdebug = !showdebug;
 					break;
-				case Keys.R:
-//					world.destroyBody(builder.getRamBd());
-//					world.destroyBody(builder.getTrailorBd());
-//					world.destroyBody(builder.getRamTire_l());
-//					world.destroyBody(builder.getRamTire_r());
-//					world.destroyBody(builder.getTrailorTire());
-//					world.destroyBody(builder.getHinge());
-//					world.destroyJoint(builder.getRam_hinge_Jnt());
-//					world.destroyJoint(builder.getRam_tireL_Jnt());
-//					world.destroyJoint(builder.getRam_tireR_Jnt());
-//					world.destroyJoint(builder.getTailor_hinge_Jnt());
-//					world.destroyJoint(builder.getTrailor_tire_Jnt());
-////					world.destroyBody(gnd);
-////					world.destroyBody(ballBd);
-//										
-//					builder = new TruckBuilder(new Vector2(0, -5), world, new RamBody(),
-//							new RamTire(), new TrailorBody(), new TrailorTire(),
-//							new Hinge());
-//					wldDef = new WeldJointDef();
-//					rvDef = new RevoluteJointDef();
-//					builder.joinParts(wldDef, rvDef);
-//
-//					
-//					setTest();
-					game.setScreen(new MainGameScreen(game));
+				case Keys.P:
+					pausegame = !pausegame;
 					break;
 				default:
 					break;
 				}
-				
+
 				return true;
 			}
 
@@ -243,13 +228,16 @@ public class MainGameScreen implements Screen {
 			public boolean touchUp(int screenX, int screenY, int pointer,
 					int button) {
 				showdebug = !showdebug;
+				pausegame = !pausegame;
 				return true;
 			}
 
-
-
 		});
 		Gdx.input.setInputProcessor(plex);
+
+		music = Gdx.audio.newMusic(Gdx.files.internal("data/scene/BGM.mp3"));
+		music.setLooping(true);
+		music.setVolume(15);
 	}
 
 	@Override
