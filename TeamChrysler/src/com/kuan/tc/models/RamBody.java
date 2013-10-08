@@ -61,7 +61,7 @@ public class RamBody {
 //			new Vector2(width*(35f/47f-0.5f), height*(5f/7f-0.5f)),
 			new Vector2(width*(28f/47f-0.5f), height/2f),
 			new Vector2(-width*(0.5f-20f/47f), height/2f),
-			new Vector2(-width*(0.5f-20f/47f), height*(5f/7f-0.5f)),
+//			new Vector2(-width*(0.5f-20f/47f), height*(5f/7f-0.5f)),
 			new Vector2(-width*(0.5f-1f/47f), height*(5f/7f-0.5f)),
 			new Vector2(-width/2f, -height/2f)
 		});

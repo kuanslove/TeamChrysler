@@ -61,7 +61,7 @@ public class MainGameScreen implements Screen {
 	private boolean showdebug = true;
 	private boolean pausegame = false;
 
-	Music music;
+	private Music music;
 
 	public MainGameScreen(TC game) {
 		this.game = game;
@@ -107,7 +107,7 @@ public class MainGameScreen implements Screen {
 		FixtureDef barfixDef = new FixtureDef();
 		barfixDef.density = 1f;
 		barfixDef.friction = 3f;
-		barfixDef.restitution = 0f;
+		barfixDef.restitution = 0.3f;
 		CircleShape ball = new CircleShape();
 		ball.setRadius(3);
 		barfixDef.shape = ball;
@@ -169,9 +169,6 @@ public class MainGameScreen implements Screen {
 				.getTrailorBd().getPosition().y + 4, 0);
 		cam.update();
 
-		if (showdebug) {
-			debug.render(world, cam.combined);
-		}
 
 		if (!pausegame) {
 			world.step(1 / 60f, 8, 3);
@@ -183,6 +180,12 @@ public class MainGameScreen implements Screen {
 			if(music.isPlaying()){
 				music.pause();
 			}
+		}
+		
+		// remember you should always render the world at last, or you will get a async effect
+		// which is the texture will be a little ahead of the debug frame;
+		if (showdebug) {
+			debug.render(world, cam.combined);
 		}
 
 	}
@@ -216,6 +219,23 @@ public class MainGameScreen implements Screen {
 					break;
 				case Keys.P:
 					pausegame = !pausegame;
+					break;
+				
+				case Keys.BACKSPACE:
+					builder.getRam_tireL_Jnt().setMaxMotorTorque(-20f);
+					break;	
+					
+				case Keys.NUM_0:
+					builder.getRam_tireL_Jnt().setMaxMotorTorque(0f);
+					break;
+				case Keys.NUM_1:
+					builder.getRam_tireL_Jnt().setMaxMotorTorque(20f);
+					break;
+				case Keys.NUM_2:
+					builder.getRam_tireL_Jnt().setMaxMotorTorque(40f);
+					break;
+				case Keys.NUM_3:
+					builder.getRam_tireL_Jnt().setMaxMotorTorque(60f);
 					break;
 				default:
 					break;

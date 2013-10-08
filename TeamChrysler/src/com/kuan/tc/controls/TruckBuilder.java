@@ -125,6 +125,9 @@ public class TruckBuilder {
 				- ramBdModel.getSprite().getWidth() / 2f, -ramBdModel
 				.getSprite().getHeight() / 2);
 		rvDef.localAnchorB.set(0, 0);
+		
+		
+		
 		rvDef.enableMotor = false;
 		rvDef.maxMotorTorque = 0.5f;
 		rvDef.motorSpeed = 1f;
@@ -153,7 +156,7 @@ public class TruckBuilder {
 		
 		ram_tireL_Jnt.enableMotor(true);
 		ram_tireL_Jnt.setMotorSpeed(-15f);
-		ram_tireL_Jnt.setMaxMotorTorque(50f);
+		ram_tireL_Jnt.setMaxMotorTorque(0f);
 	}
 
 	public void drawTruck(SpriteBatch batch) {
