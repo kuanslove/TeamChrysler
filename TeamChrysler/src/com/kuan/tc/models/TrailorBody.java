@@ -14,7 +14,7 @@ public class TrailorBody {
 	private Sprite sprite;
 
 	private float width, height;
-	private float rate = 10f;
+	private float rate = 100f;
 
 	public TrailorBody() {
 		InitDef();
@@ -39,9 +39,10 @@ public class TrailorBody {
 				Gdx.files.internal("data/ramtruck/"));
 		sprite = new Sprite(atlas.findRegion("trailorBody"));
 		width = sprite.getWidth() / rate;
-		height = sprite.getHeight() / rate;
+		height = sprite.getHeight() / rate;		
 		sprite.setSize(width, height);
 		sprite.setOrigin(width/2f, height/2f);
+		
 	}
 
 	public void setShapeSpec() {

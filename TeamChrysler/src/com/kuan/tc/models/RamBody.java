@@ -3,6 +3,7 @@ package com.kuan.tc.models;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -15,7 +16,7 @@ public class RamBody {
 	private Sprite sprite;
 
 	private float width, height;
-	private float rate = 10f;
+	private float rate = 100f;
 
 	public RamBody() {
 		InitDef();
@@ -41,13 +42,20 @@ public class RamBody {
 		sprite = new Sprite(atlas.findRegion("ramBody"));
 		width = sprite.getWidth() / rate;
 		height = sprite.getHeight() / rate;
+		
+//		Gdx.app.log("width", Float.toString(width));
+//		Gdx.app.log("height", Float.toString(height));
+//		Gdx.app.log("sep", "========================");
+		
+		
 		sprite.setSize(width, height);
 		sprite.setOrigin(width/2f, height/2f);
 	}
 
 	public void setShapeSpec() {
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2, height / 2);
+		shape.setAsBox(width / 2f, height / 2f);
+		
 		fixDef.shape = shape;
 	}
 

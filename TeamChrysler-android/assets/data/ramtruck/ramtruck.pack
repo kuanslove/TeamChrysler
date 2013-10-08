@@ -5,9 +5,9 @@ filter: Nearest,Nearest
 repeat: none
 ramBody
   rotate: false
-  xy: 1, 113
-  size: 471, 142
-  orig: 471, 142
+  xy: 1, 115
+  size: 471, 140
+  orig: 471, 140
   offset: 0, 0
   index: -1
 trailorBody

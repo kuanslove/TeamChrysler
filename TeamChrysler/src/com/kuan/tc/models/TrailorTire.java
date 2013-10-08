@@ -14,7 +14,7 @@ public class TrailorTire {
 	private Sprite sprite;
 
 	private float width, height;
-	private float rate = 10f;
+	private float rate = 100f;
 
 	public TrailorTire() {
 		InitDef();
