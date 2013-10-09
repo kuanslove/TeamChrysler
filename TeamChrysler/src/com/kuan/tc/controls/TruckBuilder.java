@@ -25,7 +25,6 @@ public class TruckBuilder {
 	private WeldJoint tailor_hinge_Jnt;
 	private RevoluteJoint trailor_tire_Jnt, ram_tireL_Jnt, ram_tireR_Jnt,
 			ram_hinge_Jnt;
-
 	private Body hinge, ramBd, ramTire_l, ramTire_r, trailorBd, trailorTire;
 
 	// private WheelJointDef wjDef;
@@ -34,6 +33,10 @@ public class TruckBuilder {
 
 	private World world;
 
+	private float torque =0f;
+	private float speed =-20f;
+	
+	
 	public TruckBuilder(Vector2 startPt, World world, RamBody ramBdModel,
 			RamTire ramTireModel, TrailorBody trailorBdModel,
 			TrailorTire trailorTireModel, Hinge hingeModel) {
@@ -155,8 +158,8 @@ public class TruckBuilder {
 		
 		
 		ram_tireL_Jnt.enableMotor(true);
-		ram_tireL_Jnt.setMotorSpeed(-15f);
-		ram_tireL_Jnt.setMaxMotorTorque(0f);
+		ram_tireL_Jnt.setMotorSpeed(speed);
+		ram_tireL_Jnt.setMaxMotorTorque(torque);
 	}
 
 	public void drawTruck(SpriteBatch batch) {
@@ -357,6 +360,22 @@ public class TruckBuilder {
 
 	public void setRvDef(RevoluteJointDef rvDef) {
 		this.rvDef = rvDef;
+	}
+
+	public float getTorque() {
+		return torque;
+	}
+
+	public void setTorque(float torque) {
+		this.torque = torque;
+	}
+
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
 	}
 
 }

@@ -9,8 +9,8 @@ public class Main {
 		cfg.title = "TeamChrysler";
 		cfg.useGL20 = true;
 		cfg.width = 1920;
-		cfg.height = 1104;
-		cfg.resizable = true;
+		cfg.height = 960;
+		cfg.resizable = false;
 		
 		new LwjglApplication(new TC(), cfg);
 	}

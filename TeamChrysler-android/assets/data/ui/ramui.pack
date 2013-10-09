@@ -5,42 +5,63 @@ filter: Nearest,Nearest
 repeat: none
 GreenRamDown
   rotate: false
-  xy: 1, 626
+  xy: 1, 679
+  size: 300, 315
+  orig: 300, 315
+  offset: 0, 0
+  index: -1
+GreenRam
+  rotate: false
+  xy: 1, 362
   size: 300, 315
   orig: 300, 315
   offset: 0, 0
   index: -1
 GreenRamUp
   rotate: false
-  xy: 1, 309
+  xy: 303, 679
   size: 300, 315
   orig: 300, 315
   offset: 0, 0
   index: -1
 RedRamDown
   rotate: false
-  xy: 303, 635
+  xy: 1, 54
+  size: 299, 306
+  orig: 299, 306
+  offset: 0, 0
+  index: -1
+RedRam
+  rotate: false
+  xy: 303, 371
   size: 299, 306
   orig: 299, 306
   offset: 0, 0
   index: -1
 RedRamUp
   rotate: false
-  xy: 1, 1
+  xy: 605, 688
   size: 299, 306
   orig: 299, 306
   offset: 0, 0
   index: -1
 GasGauge
   rotate: false
-  xy: 303, 333
+  xy: 302, 60
   size: 289, 300
   orig: 289, 300
   offset: 0, 0
   index: -1
 Pause
   rotate: false
-  xy: 604, 758
+  xy: 593, 186
+  size: 162, 183
+  orig: 162, 183
+  offset: 0, 0
+  index: -1
+Continue
+  rotate: false
+  xy: 593, 1
   size: 162, 183
   orig: 162, 183
   offset: 0, 0

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -22,8 +24,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kuan.tc.TC;
 import com.kuan.tc.controls.TruckBuilder;
 import com.kuan.tc.controls.TruckController;
@@ -47,7 +53,8 @@ public class MainGameScreen implements Screen {
 
 	private Stage stage;
 	// this is for that greenRam and redRam
-	private ImageButton power, brake, pause;
+	private ImageButton power, back;
+	private Image playpause;
 	private Sprite gauge;
 
 	private InputMultiplexer plex;
@@ -55,6 +62,7 @@ public class MainGameScreen implements Screen {
 	private Sprite bg, ball_sp;
 	private Sprite[] bgs;
 	private SpriteBatch batch;
+	private SpriteBatch batch_ui;
 
 	// this is a test Body
 	private Body ballBd, gnd;
@@ -77,8 +85,10 @@ public class MainGameScreen implements Screen {
 		builder.joinParts(wldDef, rvDef);
 
 		setTest();
+		buildButton();
 
 		batch = new SpriteBatch();
+		batch_ui = new SpriteBatch();
 	}
 
 	// this is just a test scene
@@ -91,9 +101,9 @@ public class MainGameScreen implements Screen {
 		gndfixDef.friction = 10f;
 		gndfixDef.restitution = 0.01f;
 		ChainShape ground = new ChainShape();
-		ground.createChain(new Vector2[] { new Vector2(-50, -10),
+		ground.createChain(new Vector2[] { new Vector2(-150, 30), new Vector2(-50, -10),
 				new Vector2(-5, -10), new Vector2(10, -10), new Vector2(40, 0),
-				new Vector2(80, 5), new Vector2(150, 30) });
+				new Vector2(80, 5), new Vector2(150, 30), new Vector2(250, 20),new Vector2(350, 90) });
 		gndfixDef.shape = ground;
 
 		gnd = world.createBody(gndDef);
@@ -107,7 +117,7 @@ public class MainGameScreen implements Screen {
 		FixtureDef barfixDef = new FixtureDef();
 		barfixDef.density = 1f;
 		barfixDef.friction = 3f;
-		barfixDef.restitution = 0.3f;
+		barfixDef.restitution = 0.2f;
 		CircleShape ball = new CircleShape();
 		ball.setRadius(3);
 		barfixDef.shape = ball;
@@ -166,46 +176,148 @@ public class MainGameScreen implements Screen {
 		batch.end();
 
 		cam.position.set(builder.getTrailorBd().getPosition().x + 5, builder
-				.getTrailorBd().getPosition().y + 4, 0);
+				.getTrailorBd().getPosition().y + 2, 0);
 		cam.update();
 
-
+		// logic to pause
 		if (!pausegame) {
 			world.step(1 / 60f, 8, 3);
-		
-			if(!music.isPlaying()){
+
+			if (!music.isPlaying()) {
 				music.play();
 			}
 		} else {
-			if(music.isPlaying()){
+			if (music.isPlaying()) {
 				music.pause();
 			}
 		}
-		
-		// remember you should always render the world at last, or you will get a async effect
+
+		// remember you should always render the world at last, or you will get
+		// a async effect
 		// which is the texture will be a little ahead of the debug frame;
 		if (showdebug) {
 			debug.render(world, cam.combined);
 		}
 
+		// after debug, the UI will be painted on screen
+		drawUI(delta);
+
 	}
 
-	@Override
-	public void resize(int width, int height) {
-		cam.viewportWidth = width / 60;
-		cam.viewportHeight = height / 60;
-		cam.update();
+	public void buildButton() {
+		TextureAtlas atlas = new TextureAtlas(
+				Gdx.files.internal("data/ui/ramui.pack"),
+				Gdx.files.internal("data/ui"));
+		stage = new Stage();
 
+		TextureRegion redup_tr = atlas.findRegion("RedRamUp");
+		TextureRegion reddown_tr = atlas.findRegion("RedRamDown");
+		TextureRegionDrawable redup = new TextureRegionDrawable(redup_tr);
+		TextureRegionDrawable reddown = new TextureRegionDrawable(reddown_tr);
+		back = new ImageButton(redup, reddown);
+		back.setPosition(10f, 10f);
+		back.addListener(new InputListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				float tq = builder.getTorque();
+
+				if(tq>-80){
+					tq-=20f;
+					builder.setTorque(tq);
+				}
+				builder.getRam_tireL_Jnt().setMaxMotorTorque(tq);
+			}
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+		});
+
+		TextureRegion greenup_tr = atlas.findRegion("GreenRamUp");
+		TextureRegion greendown_tr = atlas.findRegion("GreenRamDown");
+		TextureRegionDrawable greenup = new TextureRegionDrawable(greenup_tr);
+		TextureRegionDrawable greendown = new TextureRegionDrawable(greendown_tr);
+		power = new ImageButton(greenup, greendown);
+		power.setPosition(1600f, 10f);
+		power.addListener(new InputListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				float tq = builder.getTorque();
+				if(tq<80){
+					tq+=20f;
+					builder.setTorque(tq);
+				}
+				builder.getRam_tireL_Jnt().setMaxMotorTorque(tq);
+			}
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+		});
+		
+		TextureRegion pause_tr = atlas.findRegion("Pause");
+		TextureRegion play_tr = atlas.findRegion("Continue");
+		final TextureRegionDrawable pause = new TextureRegionDrawable(pause_tr);
+		final TextureRegionDrawable play = new TextureRegionDrawable(play_tr);
+		playpause = new Image(pause);
+		playpause.setPosition(Gdx.graphics.getWidth()/2f-pause_tr.getRegionWidth()/2, 10);
+		playpause.addListener(new InputListener(){
+			
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				showdebug = !showdebug;
+				pausegame = !pausegame;
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				if(pausegame){
+					playpause.setDrawable(play);
+				}
+				else {
+					playpause.setDrawable(pause);
+				}
+				
+			}
+			
+		});
+		
+		
+		stage.addActor(back);
+		stage.addActor(power);
+		stage.addActor(playpause);
+
+	}
+
+	public void drawUI(float delta) {
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
 	public void show() {
 
 		plex = new InputMultiplexer();
+		plex.addProcessor(stage);
 		plex.addProcessor(new TruckController() {
 
 			@Override
 			public boolean scrolled(int amount) {
+				if((cam.zoom +amount / 25f) <0 || (cam.zoom + amount / 25f)>1.5){
+					return true;
+				}
+				
 				cam.zoom += amount / 25f;
 				return true;
 			}
@@ -220,11 +332,10 @@ public class MainGameScreen implements Screen {
 				case Keys.P:
 					pausegame = !pausegame;
 					break;
-				
+
 				case Keys.BACKSPACE:
 					builder.getRam_tireL_Jnt().setMaxMotorTorque(-20f);
-					break;	
-					
+					break;
 				case Keys.NUM_0:
 					builder.getRam_tireL_Jnt().setMaxMotorTorque(0f);
 					break;
@@ -244,13 +355,7 @@ public class MainGameScreen implements Screen {
 				return true;
 			}
 
-			@Override
-			public boolean touchUp(int screenX, int screenY, int pointer,
-					int button) {
-				showdebug = !showdebug;
-				pausegame = !pausegame;
-				return true;
-			}
+
 
 		});
 		Gdx.input.setInputProcessor(plex);
@@ -258,6 +363,14 @@ public class MainGameScreen implements Screen {
 		music = Gdx.audio.newMusic(Gdx.files.internal("data/scene/BGM.mp3"));
 		music.setLooping(true);
 		music.setVolume(15);
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		cam.viewportWidth = width / 60;
+		cam.viewportHeight = height / 60;
+		cam.update();
+
 	}
 
 	@Override
